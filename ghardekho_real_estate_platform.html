@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GharDekho - Buy, Sell & Rent Properties, Flats, Houses & Plots in India</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#f97316',
+                            600: '#ea580c',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="filterByCategory('all')">
+                    <div class="w-11 h-11 bg-gradient-to-br from-brand-600 to-teal-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-md">
+                        <i class="fa-solid font-bold fa-house-chimney-window"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-extrabold bg-gradient-to-r from-brand-700 to-teal-600 bg-clip-text text-transparent">GharDekho</span>
+                        <span class="block text-[10px] font-semibold uppercase tracking-widest text-slate-400 -mt-1">Buy • Sell • Rent</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8 font-medium text-slate-600 text-sm">
+                    <a href="#hero" class="hover:text-brand-600 transition-colors py-1">Home</a>
+                    <a href="#featured" onclick="filterByCategory('all')" class="hover:text-brand-600 transition-colors py-1">All Properties</a>
+                    <a href="#featured" onclick="filterByPurpose('Sale')" class="hover:text-brand-600 transition-colors py-1">Buy</a>
+                    <a href="#featured" onclick="filterByCategory('flat')" class="hover:text-brand-600 transition-colors py-1">Flats & Apartments</a>
+                    <a href="#featured" onclick="filterByCategory('land')" class="hover:text-brand-600 transition-colors py-1">Land / Plots</a>
+                    <a href="#services" class="hover:text-brand-600 transition-colors py-1">Services</a>
+                </div>
+
+                <!-- Action Button & Mobile Menu Toggle -->
+                <div class="flex items-center space-x-4">
+                    <button onclick="openPostModal()" class="hidden sm:flex items-center space-x-2 bg-gradient-to-r from-accent-500 to-orange-600 text-white font-semibold px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg hover:from-accent-600 hover:to-orange-700 transition-all duration-200 text-sm">
+                        <i class="fa-solid fa-circle-plus text-base"></i>
+                        <span>Post Property <span class="bg-white/20 text-xs px-2 py-0.5 rounded-full uppercase ml-1">Free</span></span>
+                    </button>
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-600 hover:text-slate-900 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3">
+            <a href="#hero" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium">Home</a>
+            <a href="#featured" onclick="filterByCategory('all'); toggleMobileMenu()" class="block py-2 text-slate-700 font-medium">All Properties</a>
+            <a href="#featured" onclick="filterByPurpose('Sale'); toggleMobileMenu()" class="block py-2 text-slate-700 font-medium">Buy Properties</a>
+            <a href="#featured" onclick="filterByCategory('flat'); toggleMobileMenu()" class="block py-2 text-slate-700 font-medium">Flats & Apartments</a>
+            <a href="#featured" onclick="filterByCategory('land'); toggleMobileMenu()" class="block py-2 text-slate-700 font-medium">Land & Plots</a>
+            <a href="#services" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium">Value Services</a>
+            <button onclick="openPostModal(); toggleMobileMenu()" class="w-full mt-2 bg-accent-500 text-white font-semibold py-3 rounded-xl shadow text-center">
+                <i class="fa-solid fa-circle-plus mr-2"></i> Post Property Free
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative bg-slate-900 text-white py-16 lg:py-24 overflow-hidden">
+        <!-- Background Overlay Image -->
+        <div class="absolute inset-0 z-0 opacity-25 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80');"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent z-0"></div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 text-center">
+            <span class="inline-block bg-brand-500/20 border border-brand-400/30 text-brand-300 font-semibold text-xs sm:text-sm px-4 py-1.5 rounded-full mb-4 uppercase tracking-wider backdrop-blur-sm">
+                <i class="fa-solid fa-shield-halved text-emerald-400 mr-2"></i>100% Direct Owner & Verified Listings
+            </span>
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 leading-tight">
+                Apna Sahi Ghar ya Zameen <br class="hidden sm:inline"><span class="bg-gradient-to-r from-teal-300 via-sky-300 to-indigo-300 bg-clip-text text-transparent">Dhoondho Asani Se!</span>
+            </h1>
+            <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-8 font-light">
+                Buy, sell, or rent verified flats, luxury houses, residential plots, and commercial properties with zero broker confusion.
+            </p>
+
+            <!-- Search Box Container -->
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-2xl text-slate-800 max-w-4xl mx-auto border border-white/20 backdrop-blur-md">
+                <!-- Search Toggle Tabs -->
+                <div class="flex space-x-2 border-b border-slate-200 pb-4 mb-4">
+                    <button id="btnBuy" onclick="setSearchType('Sale')" class="px-5 py-2 rounded-lg font-bold text-sm bg-brand-600 text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-bag-shopping mr-2"></i> Buy
+                    </button>
+                    <button id="btnRent" onclick="setSearchType('Rent')" class="px-5 py-2 rounded-lg font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all">
+                        <i class="fa-solid fa-key mr-2"></i> Rent
+                    </button>
+                </div>
+
+                <!-- Filter Grid Controls -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-left">
+                    <!-- Location Search Input -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">City or Locality</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-location-dot absolute left-3 top-3.5 text-slate-400"></i>
+                            <input type="text" id="searchLocation" placeholder="e.g. Mumbai, Noida, Jaipur" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium">
+                        </div>
+                    </div>
+
+                    <!-- Property Type Filter -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Property Type</label>
+                        <select id="searchType" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium">
+                            <option value="all">All Property Types</option>
+                            <option value="flat">Flat / Apartment</option>
+                            <option value="house">Independent House / Villa</option>
+                            <option value="land">Land / Plot</option>
+                            <option value="commercial">Commercial Space</option>
+                        </select>
+                    </div>
+
+                    <!-- Budget Range Filter -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Max Budget</label>
+                        <select id="searchBudget" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium">
+                            <option value="all">Any Price Range</option>
+                            <option value="3000000">Up to ₹30 Lakhs</option>
+                            <option value="6000000">Up to ₹60 Lakhs</option>
+                            <option value="10000000">Up to ₹1 Crore</option>
+                            <option value="20000000">₹1 Cr - ₹2 Cr+</option>
+                        </select>
+                    </div>
+
+                    <!-- Search Submit Button -->
+                    <div class="flex items-end">
+                        <button onclick="executeHeroSearch()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span>Search Properties</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats Bar -->
+    <section class="bg-white border-b border-slate-100 py-6">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div class="p-2">
+                <p class="text-2xl sm:text-3xl font-extrabold text-brand-600">12,500+</p>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">Active Properties</p>
+            </div>
+            <div class="p-2">
+                <p class="text-2xl sm:text-3xl font-extrabold text-emerald-600">8,200+</p>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">Direct Owners</p>
+            </div>
+            <div class="p-2">
+                <p class="text-2xl sm:text-3xl font-extrabold text-amber-500">99.8%</p>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">Verified Plots & Homes</p>
+            </div>
+            <div class="p-2">
+                <p class="text-2xl sm:text-3xl font-extrabold text-purple-600">50+ Cities</p>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">Across India</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Properties Section -->
+    <section id="featured" class="py-12 bg-slate-50 flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+                <div>
+                    <span class="text-brand-600 font-bold uppercase tracking-wider text-xs">Explore Real Estate</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Featured Listings</h2>
+                </div>
+                <!-- Category Tab Filters -->
+                <div class="mt-4 md:mt-0 flex flex-wrap gap-2">
+                    <button onclick="filterByCategory('all')" class="cat-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border border-brand-600 bg-brand-600 text-white" data-cat="all">
+                        All Properties
+                    </button>
+                    <button onclick="filterByCategory('flat')" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border border-slate-200 bg-white text-slate-600 hover:bg-slate-100" data-cat="flat">
+                        <i class="fa-solid fa-building mr-1.5"></i> Flats
+                    </button>
+                    <button onclick="filterByCategory('house')" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border border-slate-200 bg-white text-slate-600 hover:bg-slate-100" data-cat="house">
+                        <i class="fa-solid fa-house mr-1.5"></i> Houses
+                    </button>
+                    <button onclick="filterByCategory('land')" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border border-slate-200 bg-white text-slate-600 hover:bg-slate-100" data-cat="land">
+                        <i class="fa-solid fa-layer-group mr-1.5"></i> Lands / Plots
+                    </button>
+                </div>
+            </div>
+
+            <!-- Property Cards Grid -->
+            <div id="propertyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Javascript will render property cards here -->
+            </div>
+
+            <!-- Empty State Display -->
+            <div id="noResults" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                <i class="fa-solid fa-house-circle-xmark text-5xl text-slate-300 mb-4"></i>
+                <h3 class="text-lg font-bold text-slate-700">Koi Property Nahi Mili!</h3>
+                <p class="text-slate-500 text-sm mt-1 max-w-md mx-auto">Try resetting your filters or search for another city like Delhi, Mumbai, Bengaluru, or Jaipur.</p>
+                <button onclick="resetFilters()" class="mt-4 bg-brand-600 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-brand-700">Reset Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Local Business & Value-Added Services -->
+    <section id="services" class="py-12 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-accent-500 font-bold uppercase tracking-wider text-xs">Complete Support</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Value Added Services</h2>
+                <p class="text-slate-500 text-sm mt-2">Ghar khareedne se lekar shift hone tak — sabhi zarurat ek hi jagah.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Service 1 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-base mb-1">Home Loan Assistance</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Lowest interest rate loans from top Indian banks with instant pre-approval.</p>
+                    <a href="javascript:void(0)" onclick="alert('Loan officer will contact you within 24 hours!')" class="mt-4 inline-block text-xs font-bold text-emerald-600 hover:text-emerald-700">Apply Now <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-sky-100 text-brand-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-file-contract"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-base mb-1">Legal Verification</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Registry, title deed check & sale agreement paperwork done by legal experts.</p>
+                    <a href="javascript:void(0)" onclick="alert('Legal counsel inquiry submitted!')" class="mt-4 inline-block text-xs font-bold text-brand-600 hover:text-brand-700">Get Assistance <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-paint-roller"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-base mb-1">Interiors & Design</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Modular kitchen, custom wardrobes & modern interiors for your new home.</p>
+                    <a href="javascript:void(0)" onclick="alert('Interior designer consultation scheduled!')" class="mt-4 inline-block text-xs font-bold text-purple-600 hover:text-purple-700">Explore Designs <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold mb-4 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-base mb-1">Packers & Movers</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Hassle-free safe house shifting & relocation services across any city.</p>
+                    <a href="javascript:void(0)" onclick="alert('Moving quote estimate request sent!')" class="mt-4 inline-block text-xs font-bold text-amber-600 hover:text-amber-700">Get Free Quote <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- POST PROPERTY MODAL -->
+    <div id="postModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative my-8 custom-scrollbar max-h-[90vh] overflow-y-auto">
+            <button onclick="closePostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-10 h-10 bg-accent-500/10 text-accent-600 rounded-xl flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-900">Post Property Free</h3>
+                    <p class="text-xs text-slate-500">Bechne ya kiraye pr dene ke liye details bharein</p>
+                </div>
+            </div>
+
+            <form id="postPropertyForm" onsubmit="handlePostSubmit(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Property Purpose *</label>
+                        <select id="postPurpose" required class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <option value="Sale">For Sale (Bechna Hai)</option>
+                            <option value="Rent">For Rent (Kiraye Pr Dena Hai)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Property Category *</label>
+                        <select id="postCategory" required class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                            <option value="flat">Flat / Apartment</option>
+                            <option value="house">House / Villa</option>
+                            <option value="land">Plot / Land</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Property Title *</label>
+                    <input type="text" id="postTitle" required placeholder="e.g. 3 BHK Luxury Apartment in Civil Lines" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">City / Location *</label>
+                        <input type="text" id="postLocation" required placeholder="e.g. Sector 62, Noida" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Total Price (₹) *</label>
+                        <input type="number" id="postPrice" required placeholder="e.g. 4500000" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">BHK (Flats/Houses)</label>
+                        <input type="text" id="postBhk" placeholder="e.g. 2 BHK" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Area (Sq.Ft)</label>
+                        <input type="number" id="postArea" placeholder="e.g. 1250" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Bathrooms</label>
+                        <input type="number" id="postBath" placeholder="e.g. 2" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Image URL (Optional)</label>
+                    <input type="url" id="postImage" placeholder="Leave blank for default property image" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Property Description</label>
+                    <textarea id="postDesc" rows="3" placeholder="Near metro station, 24/7 water supply, gated security..." class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none"></textarea>
+                </div>
+
+                <div class="border-t border-slate-100 pt-3">
+                    <p class="text-xs font-bold text-slate-700 mb-2">Seller Contact Information</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="text" id="postOwnerName" required placeholder="Owner Name" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                        <input type="tel" id="postOwnerPhone" required placeholder="Mobile / WhatsApp Number" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-accent-500 hover:bg-accent-600 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-4">
+                    Submit Property Listing
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PROPERTY DETAIL MODAL -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-2xl relative my-8 overflow-hidden custom-scrollbar max-h-[92vh] flex flex-col">
+            <!-- Modal Header / Image Slider -->
+            <div class="relative h-64 sm:h-80 w-full bg-slate-900">
+                <img id="modalImg" src="" alt="Property" class="w-full h-full object-cover">
+                <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-10 text-white bg-slate-900/60 hover:bg-slate-900 w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="absolute bottom-4 left-4">
+                    <span id="modalPurposeBadge" class="bg-brand-600 text-white font-bold text-xs uppercase px-3 py-1 rounded-full">
+                        For Sale
+                    </span>
+                </div>
+            </div>
+
+            <!-- Modal Content Body -->
+            <div class="p-6 overflow-y-auto custom-scrollbar space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                        <h2 id="modalTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900">Property Title</h2>
+                        <p id="modalLocation" class="text-sm text-slate-500 mt-1 flex items-center">
+                            <i class="fa-solid fa-location-dot text-brand-500 mr-1.5"></i> Location Name
+                        </p>
+                    </div>
+                    <div class="mt-3 sm:mt-0 text-left sm:text-right">
+                        <span class="text-xs font-semibold uppercase text-slate-400 block">Demanded Price</span>
+                        <span id="modalPrice" class="text-2xl font-extrabold text-brand-700">₹0</span>
+                    </div>
+                </div>
+
+                <!-- Spec Highlights Grid -->
+                <div class="grid grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl text-center">
+                    <div>
+                        <span class="text-slate-400 text-xs font-medium block">Configuration</span>
+                        <span id="modalBhk" class="text-slate-800 font-bold text-base">N/A</span>
+                    </div>
+                    <div class="border-x border-slate-200">
+                        <span class="text-slate-400 text-xs font-medium block">Super Area</span>
+                        <span id="modalArea" class="text-slate-800 font-bold text-base">N/A</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 text-xs font-medium block">Bathrooms / Type</span>
+                        <span id="modalBath" class="text-slate-800 font-bold text-base">N/A</span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm uppercase tracking-wide mb-2">Property Description</h4>
+                    <p id="modalDesc" class="text-slate-600 text-sm leading-relaxed">Detailed description will appear here...</p>
+                </div>
+
+                <!-- Amenities Checklist -->
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm uppercase tracking-wide mb-3">Key Features & Amenities</h4>
+                    <div id="modalAmenities" class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-medium text-slate-700">
+                        <span class="bg-slate-100 px-3 py-2 rounded-lg flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i>24/7 Water Supply</span>
+                        <span class="bg-slate-100 px-3 py-2 rounded-lg flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i>Car Parking</span>
+                        <span class="bg-slate-100 px-3 py-2 rounded-lg flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i>Gated Security</span>
+                        <span class="bg-slate-100 px-3 py-2 rounded-lg flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i>Power Backup</span>
+                        <span class="bg-slate-100 px-3 py-2 rounded-lg flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i>Near Main Highway</span>
+                    </div>
+                </div>
+
+                <!-- Map Location Mockup -->
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm uppercase tracking-wide mb-2">Map Location Preview</h4>
+                    <div class="w-full h-36 bg-slate-200 rounded-xl flex flex-col items-center justify-center text-slate-500 border border-slate-300 relative overflow-hidden">
+                        <i class="fa-solid fa-map-location-dot text-4xl text-brand-500 mb-1"></i>
+                        <span class="text-xs font-semibold">Interactive Google Map Location Verified</span>
+                        <span class="text-[10px] text-slate-400">Exact address revealed upon owner contact</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Action Footer -->
+            <div class="bg-slate-50 border-t border-slate-200 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <div class="w-10 h-10 bg-brand-100 text-brand-700 font-bold rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <span id="modalOwner" class="block font-bold text-sm text-slate-800">Owner Name</span>
+                        <span class="block text-xs text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check"></i> Verified Seller</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                    <a id="modalWhatsappBtn" href="#" target="_blank" class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>WhatsApp Owner</span>
+                    </a>
+                    <a id="modalCallBtn" href="#" class="flex-1 sm:flex-none bg-brand-600 hover:bg-brand-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors">
+                        <i class="fa-solid fa-phone text-sm"></i>
+                        <span>Call Owner</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 pt-12 pb-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-slate-800">
+                <!-- Col 1: Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-9 h-9 bg-brand-600 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+                            <i class="fa-solid fa-house-chimney-window"></i>
+                        </div>
+                        <span class="text-xl font-extrabold text-white">GharDekho</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        India's premier real estate platform connecting home buyers, tenants, and property sellers directly with zero brokerage fee options.
+                    </p>
+                    <div class="flex space-x-3 text-slate-400">
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-colors"><i class="fa-brands fa-facebook-f text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-colors"><i class="fa-brands fa-instagram text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-colors"><i class="fa-brands fa-twitter text-xs"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Quick Links -->
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#featured" onclick="filterByCategory('flat')" class="hover:text-white transition-colors">Flats in Delhi NCR</a></li>
+                        <li><a href="#featured" onclick="filterByCategory('house')" class="hover:text-white transition-colors">Luxury Houses in Mumbai</a></li>
+                        <li><a href="#featured" onclick="filterByCategory('land')" class="hover:text-white transition-colors">Residential Plots in Jaipur</a></li>
+                        <li><a href="#featured" onclick="filterByPurpose('Rent')" class="hover:text-white transition-colors">Rental Homes</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Legal & Services -->
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Services</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#services" class="hover:text-white transition-colors">Home Loan Assistance</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Legal Title Check</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Interior Designing</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Packers & Movers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contact -->
+                <div>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">Contact Support</h4>
+                    <p class="text-xs text-slate-400 mb-2"><i class="fa-solid fa-headset mr-2 text-brand-500"></i> Toll-Free: 1800-123-GHAR</p>
+                    <p class="text-xs text-slate-400 mb-2"><i class="fa-solid fa-envelope mr-2 text-brand-500"></i> support@ghardekho.com</p>
+                    <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-2 text-brand-500"></i> New Delhi, India</p>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center">
+                <p>&copy; 2026 GharDekho Real Estate Technologies. All rights reserved.</p>
+                <p class="mt-2 sm:mt-0">Made for Indian Property Buyers & Sellers</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Sample Property Dataset
+        let properties = [
+            {
+                id: 1,
+                title: "3 BHK Modern Luxury Flat",
+                purpose: "Sale",
+                category: "flat",
+                price: 8500000,
+                location: "Indirapuram, Ghaziabad",
+                bhk: "3 BHK",
+                area: "1650",
+                bathrooms: "3",
+                owner: "Rajesh Sharma",
+                phone: "+919876543210",
+                image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+                description: "Spacious 3 BHK apartment with modular kitchen, wooden flooring in master bedroom, double balcony with park view, and reserved underground car parking."
+            },
+            {
+                id: 2,
+                title: "Independent 4 BHK Villa / House",
+                purpose: "Sale",
+                category: "house",
+                price: 18500000,
+                location: "Vaishali Nagar, Jaipur",
+                bhk: "4 BHK Villa",
+                area: "2800",
+                bathrooms: "4",
+                owner: "Vikram Singh",
+                phone: "+919811223344",
+                image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
+                description: "East-facing corner duplex villa with private garden, terrace, servant room, solar water heating, and high-end security system."
+            },
+            {
+                id: 3,
+                title: "Residential Land / Plot in Gated Colony",
+                purpose: "Sale",
+                category: "land",
+                price: 4200000,
+                location: "Devanahalli, Bengaluru",
+                bhk: "Plot",
+                area: "1500",
+                bathrooms: "N/A",
+                owner: "Anil Kumar",
+                phone: "+919988776655",
+                image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
+                description: "Clear title BDA approved residential plot in a rapidly developing sector. Close to International Airport, 40ft wide internal roads, electricity and water lines ready."
+            },
+            {
+                id: 4,
+                title: "2 BHK Fully Furnished Apartment for Rent",
+                purpose: "Rent",
+                category: "flat",
+                price: 28000,
+                location: "Powai, Mumbai",
+                bhk: "2 BHK",
+                area: "950",
+                bathrooms: "2",
+                owner: "Priya Nair",
+                phone: "+919765432109",
+                image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+                description: "Ready to move fully furnished 2 BHK with ACs, TV, sofa, double beds, refrigerator, and high-speed Wi-Fi capability. Ideal for family or working professionals."
+            },
+            {
+                id: 5,
+                title: "Prime Commercial Plot / Space",
+                purpose: "Sale",
+                category: "commercial",
+                price: 24000000,
+                location: "Sector 62, Noida",
+                bhk: "Commercial",
+                area: "3200",
+                bathrooms: "2",
+                owner: "Sanjay Gupta",
+                phone: "+919833445566",
+                image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
+                description: "Main road facing commercial space suitable for IT office, bank branch, or retail showroom. High footfall area with ample visitor parking."
+            },
+            {
+                id: 6,
+                title: "Budget-Friendly 1 BHK Flat",
+                purpose: "Sale",
+                category: "flat",
+                price: 2200000,
+                location: "Uttam Nagar, New Delhi",
+                bhk: "1 BHK",
+                area: "520",
+                bathrooms: "1",
+                owner: "Amit Verma",
+                phone: "+919911002233",
+                image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+                description: "Newly constructed 1 BHK flat with lift, registry available, 90% loan facility from lead banks. Just 5 minutes walk from metro station."
+            }
+        ];
+
+        // Active State Variables
+        let activeCategory = 'all';
+        let currentSearchType = 'Sale';
+
+        // Helper function: Format Indian Currency Rupees
+        function formatPrice(amount, purpose) {
+            let num = Number(amount);
+            let formatted = '';
+            if (num >= 10000000) {
+                formatted = '₹' + (num / 10000000).toFixed(2) + ' Cr';
+            } else if (num >= 100000) {
+                formatted = '₹' + (num / 100000).toFixed(2) + ' Lakh';
+            } else {
+                formatted = '₹' + num.toLocaleString('en-IN');
+            }
+            if (purpose === 'Rent') {
+                formatted += ' / month';
+            }
+            return formatted;
+        }
+
+        // Render Property Cards dynamically
+        function renderProperties(list) {
+            const grid = document.getElementById('propertyGrid');
+            const noRes = document.getElementById('noResults');
+            
+            grid.innerHTML = '';
+
+            if (!list || list.length === 0) {
+                noRes.classList.remove('hidden');
+                return;
+            } else {
+                noRes.classList.add('hidden');
+            }
+
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group";
+                
+                card.innerHTML = `
+                    <div class="relative h-48 w-full overflow-hidden bg-slate-100">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80'">
+                        <div class="absolute top-3 left-3 flex gap-2">
+                            <span class="${item.purpose === 'Rent' ? 'bg-purple-600' : 'bg-brand-600'} text-white font-bold text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                                For ${item.purpose}
+                            </span>
+                            <span class="bg-slate-900/70 text-white backdrop-blur-sm font-semibold text-[10px] uppercase px-2.5 py-1 rounded-md">
+                                ${item.category}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-5 flex-grow flex flex-col justify-between space-y-3">
+                        <div>
+                            <div class="flex justify-between items-baseline mb-1">
+                                <span class="text-xl font-extrabold text-brand-700">${formatPrice(item.price, item.purpose)}</span>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-base group-hover:text-brand-600 transition-colors line-clamp-1">${item.title}</h3>
+                            <p class="text-slate-500 text-xs flex items-center mt-1">
+                                <i class="fa-solid fa-location-dot text-brand-500 mr-1.5 flex-shrink-0"></i>
+                                <span class="truncate">${item.location}</span>
+                            </p>
+                        </div>
+
+                        <!-- Highlights Specs -->
+                        <div class="grid grid-cols-3 gap-1 py-2.5 px-3 bg-slate-50 rounded-xl text-center text-xs text-slate-600 font-medium">
+                            <div>
+                                <span class="block text-[10px] text-slate-400 uppercase">Type</span>
+                                <span>${item.bhk}</span>
+                            </div>
+                            <div class="border-x border-slate-200">
+                                <span class="block text-[10px] text-slate-400 uppercase">Area</span>
+                                <span>${item.area} sqft</span>
+                            </div>
+                            <div>
+                                <span class="block text-[10px] text-slate-400 uppercase">Baths</span>
+                                <span>${item.bathrooms}</span>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <button onclick="openDetailModal(${item.id})" class="w-full bg-slate-900 group-hover:bg-brand-600 text-white font-semibold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-2 transition-colors">
+                            <span>View Details & Owner Contact</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Search Type Selector Toggle (Buy / Rent)
+        function setSearchType(type) {
+            currentSearchType = type;
+            const btnBuy = document.getElementById('btnBuy');
+            const btnRent = document.getElementById('btnRent');
+
+            if (type === 'Sale') {
+                btnBuy.className = "px-5 py-2 rounded-lg font-bold text-sm bg-brand-600 text-white transition-all shadow-sm";
+                btnRent.className = "px-5 py-2 rounded-lg font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all";
+            } else {
+                btnRent.className = "px-5 py-2 rounded-lg font-bold text-sm bg-purple-600 text-white transition-all shadow-sm";
+                btnBuy.className = "px-5 py-2 rounded-lg font-bold text-sm bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all";
+            }
+        }
+
+        // Category Filter
+        function filterByCategory(category) {
+            activeCategory = category;
+            
+            // Highlight Tab Buttons
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === category) {
+                    btn.className = "cat-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border border-brand-600 bg-brand-600 text-white";
+                } else {
+                    btn.className = "cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border border-slate-200 bg-white text-slate-600 hover:bg-slate-100";
+                }
+            });
+
+            if (category === 'all') {
+                renderProperties(properties);
+            } else {
+                const filtered = properties.filter(p => p.category === category);
+                renderProperties(filtered);
+            }
+        }
+
+        function filterByPurpose(purpose) {
+            const filtered = properties.filter(p => p.purpose === purpose);
+            renderProperties(filtered);
+        }
+
+        // Execute Hero Bar Filters Search
+        function executeHeroSearch() {
+            const locVal = document.getElementById('searchLocation').value.toLowerCase().trim();
+            const typeVal = document.getElementById('searchType').value;
+            const budgetVal = document.getElementById('searchBudget').value;
+
+            let filtered = properties.filter(item => {
+                // Purpose check
+                let matchPurpose = (item.purpose === currentSearchType);
+                
+                // Location match
+                let matchLoc = locVal === '' || item.location.toLowerCase().includes(locVal) || item.title.toLowerCase().includes(locVal);
+
+                // Type match
+                let matchType = (typeVal === 'all') || (item.category === typeVal);
+
+                // Budget match
+                let matchBudget = true;
+                if (budgetVal !== 'all') {
+                    matchBudget = Number(item.price) <= Number(budgetVal);
+                }
+
+                return matchPurpose && matchLoc && matchType && matchBudget;
+            });
+
+            renderProperties(filtered);
+
+            // Smooth scroll to property list
+            document.getElementById('featured').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetFilters() {
+            document.getElementById('searchLocation').value = '';
+            document.getElementById('searchType').value = 'all';
+            document.getElementById('searchBudget').value = 'all';
+            filterByCategory('all');
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Modal Controls
+        function openPostModal() {
+            document.getElementById('postModal').classList.remove('hidden');
+        }
+
+        function closePostModal() {
+            document.getElementById('postModal').classList.add('hidden');
+        }
+
+        function openDetailModal(id) {
+            const item = properties.find(p => p.id === id);
+            if (!item) return;
+
+            document.getElementById('modalImg').src = item.image;
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalLocation').innerHTML = `<i class="fa-solid fa-location-dot text-brand-500 mr-1.5"></i> ${item.location}`;
+            document.getElementById('modalPrice').innerText = formatPrice(item.price, item.purpose);
+            document.getElementById('modalBhk').innerText = item.bhk;
+            document.getElementById('modalArea').innerText = item.area + ' Sq.Ft';
+            document.getElementById('modalBath').innerText = item.bathrooms;
+            document.getElementById('modalDesc').innerText = item.description || "No description provided.";
+            document.getElementById('modalOwner').innerText = item.owner;
+            document.getElementById('modalPurposeBadge').innerText = "For " + item.purpose;
+
+            // WhatsApp link
+            const waText = encodeURIComponent(`Hello ${item.owner}, I am interested in your property listed on GharDekho: ${item.title} (${item.location}). Please share details.`);
+            document.getElementById('modalWhatsappBtn').href = `https://wa.me/${item.phone.replace(/[^0-9]/g, '')}?text=${waText}`;
+            document.getElementById('modalCallBtn').href = `tel:${item.phone}`;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        // Handle Property Posting Form Submit
+        function handlePostSubmit(e) {
+            e.preventDefault();
+
+            const newProp = {
+                id: Date.now(),
+                title: document.getElementById('postTitle').value,
+                purpose: document.getElementById('postPurpose').value,
+                category: document.getElementById('postCategory').value,
+                price: Number(document.getElementById('postPrice').value),
+                location: document.getElementById('postLocation').value,
+                bhk: document.getElementById('postBhk').value || "Standard",
+                area: document.getElementById('postArea').value || "1000",
+                bathrooms: document.getElementById('postBath').value || "1",
+                owner: document.getElementById('postOwnerName').value,
+                phone: document.getElementById('postOwnerPhone').value,
+                image: document.getElementById('postImage').value || "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80",
+                description: document.getElementById('postDesc').value
+            };
+
+            // Add to top of property list
+            properties.unshift(newProp);
+            renderProperties(properties);
+
+            closePostModal();
+            document.getElementById('postPropertyForm').reset();
+            alert('🎉 Congratulations! Aapki Property GharDekho pr successfully post ho gayi hai.');
+
+            document.getElementById('featured').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize Page
+        window.onload = function() {
+            renderProperties(properties);
+        };
+    </script>
+</body>
+</html>
